@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Models\Units\" />
+    <Folder Include="Models\Fuels\" />
+    <Folder Include="Builders\" />
+    <Folder Include="Models\Constants\" />
+    <Folder Include="Models\PowerPlants\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+    <Compile Remove="Manager.cs" />
+  </ItemGroup>
+</Project>
