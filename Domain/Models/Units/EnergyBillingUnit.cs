@@ -23,5 +23,7 @@ namespace Domain.Models.Units
             return new EnergyBilling(new Energy(new PositiveDecimal(convertedValue), energy), new TimeInterval(new PositiveDecimal(1), timeInterval));
         }
 
+
+
     }
 }

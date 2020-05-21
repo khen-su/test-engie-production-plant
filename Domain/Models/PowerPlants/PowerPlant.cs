@@ -8,8 +8,8 @@ namespace Domain.Models.PowerPlants
         public string Name { get;}
         public T Fuel { get; set; }
         public decimal Efficiency { get;}
-        public decimal PMin { get; }
-        public decimal PMax { get;}
+        public decimal PMin { get;  }
+        public decimal PMax { get; protected set; }
 
 
         public PowerPlant(T fuel, string name, PositiveDecimal efficiency, PositiveDecimal pmin, PositiveDecimal pmax)

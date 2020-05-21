@@ -21,5 +21,10 @@ namespace Domain.Builders
         {
             return new Kerosine(new PricePerUnit(new PositiveDecimal(price), EnergyUnit.megaWatt));
         }
+
+        public Wind BuildWindFuel(decimal intensity)
+        {
+            return new Wind(new Percentage(intensity));
+        }
     }
 }

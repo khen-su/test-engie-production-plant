@@ -4,7 +4,7 @@ namespace Domain.Models.Fuels
 {
     public class Kerosine : Fuel
     {
-        public Kerosine(PricePerUnit pricePerUnit) : base(new ValidName("kerosine"), pricePerUnit)
+        public Kerosine(PricePerUnit pricePerUnit) : base(new ValidName("kerosine"), pricePerUnit, new RatioToWasteZero())
         {
         }
     }

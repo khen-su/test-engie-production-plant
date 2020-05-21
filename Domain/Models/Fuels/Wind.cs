@@ -1,13 +1,14 @@
-﻿namespace Domain.Models.Fuels
+﻿using Domain.Models.Units;
+
+namespace Domain.Models.Fuels
 {
-    public class Wind
+    public class Wind : Fuel
     {
+        public decimal Intensity { get; set; }
 
-        public float Intensity { get; set; }
-        public Wind(Percentage intesity)
+        public Wind(Percentage intensity) : base(new ValidName("wind"), new PricePerUnitZero(), new RatioToWasteZero())
         {
-            Intensity = intesity.Value;
+            Intensity = intensity.Value;
         }
-
     }
 }

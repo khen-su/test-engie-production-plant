@@ -13,6 +13,8 @@ namespace Domain.ViewModels
         public decimal Co2 { get; set; }
         [JsonPropertyName("wind(%)")]
         [Range(0,100)]
-        public decimal Wind { get; set; }
+        public decimal Wind { get { return _windPercentage; } set { _windPercentage = value / 100; } }
+        [JsonIgnore]
+        private decimal _windPercentage { get; set; }
     }
 }
