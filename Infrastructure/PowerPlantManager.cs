@@ -18,17 +18,14 @@ namespace Infrastructure
 
         MeritOrderLogic meritOrderLogic = new MeritOrderLogic();
 
-        public ProductionPipeline Run(PowerPlantViewModel[] powerPlantViewModels, FuelViewModel fuelViewModel)
+        public ProductionPipeline Run(PowerPlantViewModel[] powerPlantViewModels, FuelViewModel fuelViewModel, decimal load)
         {
-            ProductionPipeline productionPipeline = new ProductionPipeline();
-
             List<PowerPlant<Fuel>> powerPlants = powerPlantBuilder.Build(powerPlantViewModels, fuelViewModel);
 
-            Queue<PowerPlant<Fuel>> queue = new Queue<PowerPlant<Fuel>>();
+            Queue<KeyValuePair<decimal, PowerPlant<Fuel>>> sortedPowerPlant = meritOrderLogic.Sort(powerPlants.ToDictionary(powerplant => powerplant.Name, powerplant => powerplant));
 
-            Queue<PowerPlant<Fuel>> sortedWindPowerPlant = meritOrderLogic.Sort(powerPlants.ToDictionary(powerplant => powerplant.Name, powerplant => powerplant));
-
-            return null;
+            return new ProductionPipelineLogic(new PositiveDecimal(load))
+                        .Run(sortedPowerPlant);
         }
 
 

@@ -9,27 +9,16 @@ namespace Domain
 {
     public class MeritOrderLogic
     {
-
-
-        public Queue<PowerPlant<T>> Sort<T>(Dictionary<string, PowerPlant<T>> powerplants) where T : Fuel
+        
+        public Queue<KeyValuePair<decimal, PowerPlant<Fuel>>>Sort(Dictionary<string, PowerPlant<Fuel>> powerplants)
         {
-            Queue<PowerPlant<T>> finalQueue = new Queue<PowerPlant<T>>();
+            List<KeyValuePair<decimal, PowerPlant<Fuel>>> powerPlantsWithOutput = new List<KeyValuePair<decimal, PowerPlant<Fuel>>>();
 
-            foreach(var powerPlant in powerplants)
-            {
-                PowerPlant<T> optimalOutput = OptimalOutput<T>(powerplants.Values);
-                powerplants.Remove(powerPlant.Key);
-                finalQueue.Enqueue(optimalOutput);
-            }
-
-            return finalQueue;
+           powerplants.Values.ToList().ForEach(powerPlant => powerPlantsWithOutput.Add(new KeyValuePair<decimal , PowerPlant<Fuel> >(CostUnit(powerPlant.Efficiency, powerPlant.Fuel.PricePerUnit.Price), powerPlant)));
+            return new Queue<KeyValuePair<decimal, PowerPlant<Fuel>>>(powerPlantsWithOutput.OrderBy(output => output.Key));
         }
 
-        public PowerPlant<T> OptimalOutput<T>(IEnumerable<PowerPlant<T>> powerPlants) where T: Fuel
-        {
-
-            return null;
-        }
+        public decimal CostUnit(decimal efficiency, decimal price) => price / efficiency;
 
     }
 }
