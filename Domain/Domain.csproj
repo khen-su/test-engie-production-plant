@@ -12,6 +12,8 @@
     <Folder Include="Builders\" />
     <Folder Include="Models\Constants\" />
     <Folder Include="Models\PowerPlants\" />
+    <Folder Include="Builders\Interface\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Class1.cs" />

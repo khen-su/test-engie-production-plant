@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 namespace PowerPlantCodingChallenge
 {
-    public class Startup
+    public partial class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -27,6 +29,8 @@ namespace PowerPlantCodingChallenge
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureDI(services);
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -36,10 +40,6 @@ namespace PowerPlantCodingChallenge
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-
-
-
-          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,9 +50,25 @@ namespace PowerPlantCodingChallenge
                 app.UseDeveloperExceptionPage();
             }
 
-            #region Swagger
 
-            app.UseSwagger();
+            #region WebSocket
+
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize = 4 * 1024
+            };
+
+            app.UseWebSockets();
+
+
+        
+
+        #endregion
+
+        #region Swagger
+
+        app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {

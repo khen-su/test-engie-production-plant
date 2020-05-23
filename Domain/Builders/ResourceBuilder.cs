@@ -1,11 +1,12 @@
 ﻿using System;
+using Domain.Builders.Interface;
 using Domain.Models;
 using Domain.Models.Fuels;
 using Domain.Models.Units;
 
 namespace Domain.Builders
 {
-    public class ResourceBuilder
+    public class ResourceBuilder : IResourceBuilder
     {
         public Gas BuildGasFuel(decimal price, decimal co2)
         {

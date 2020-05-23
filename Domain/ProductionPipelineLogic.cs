@@ -43,9 +43,9 @@ namespace Domain
             //If the maximum production is higher than the load to cover...
             if (current.PMax >= leftLoad)
             {
-                //And if the min does not go beyond the load...
+                //and if the min prod of the current power plant does not go beyond the load...
                 if (current.PMin > leftLoad ) return 0;
-                //Then the central produce the left load to cover
+                //then the central produce the load which is left to cover
                 return leftLoad;
             }
             //Else we need to make sure this current productionplant is better than the next one if we were forced to pick between one or the other
@@ -54,14 +54,14 @@ namespace Domain
 
                 // The optimal output is the max prod for the current powerplant while having enough p to trigger next powerplant
                 decimal optimalOutput =  Math.Min(leftLoad - next.PMin, current.PMax);
-                // If the min prod of next powerplant is higher than what's left of the load, we intend to skip it so we send back max prod for the current plant
+                // If the min prod of next powerplant is higher than what's left of the load, we intend to skip it, so we send back max prod for the current plant
                 if (optimalOutput < 0) return current.PMax;
                 //If the optimal output is lower than the minimum prod for the current powerplant... 
                 if (optimalOutput < current.PMin)
                 {
-                    //Either we return the max prod for that current powerplant because we intend to skip next one...
+                    //either we return the max prod for that current powerplant because we intend to skip the next one...
                     if (current.PMax > next.PMax ) return current.PMax;
-                    //Or skip this powerplant
+                    //or skip this powerplant
                     return 0;
                 }
                 //if ((leftLoad - current.PMin) < next.PMin) return 0;

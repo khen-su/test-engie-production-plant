@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Domain.Models;
 using Infrastructure;
+using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using PowerPlantCodingChallenge.Requests;
-using PowerPlantCodingChallenge.Response;
 
 namespace PowerPlantCodingChallenge.Controllers
 {
@@ -12,7 +13,15 @@ namespace PowerPlantCodingChallenge.Controllers
     public class PowerPlantController : Controller
     {
 
-        PowerPlantManager powerPlantManager = new PowerPlantManager();
+        private readonly IPowerPlantManager _powerPlantManager;
+
+        public PowerPlantController
+            (
+                IPowerPlantManager powerPlantManager
+            )
+        {
+            _powerPlantManager = powerPlantManager;
+        }
 
         /// <summary>
         /// Take a list of resource costs and powerplants for a specific load and send back their optimal production plan for the load
@@ -23,7 +32,19 @@ namespace PowerPlantCodingChallenge.Controllers
         [ProducesResponseType(200, Type = typeof(Queue<ProductionOutput>))]
         public IActionResult GetProductionPlan([FromBody]PowerPlantsDeliveryApiRequest apiRequest)
         {
-            return Ok(powerPlantManager.Run(apiRequest.PowerPlants, apiRequest.Fuels, apiRequest.Load).Outputs);
+            SimpleWebSocketHandler simpleWebSocketHandler = new SimpleWebSocketHandler();
+
+            try
+            {
+                var outputs =  _powerPlantManager.Run(apiRequest.PowerPlants, apiRequest.Fuels, apiRequest.Load).Outputs;
+                simpleWebSocketHandler.SendMessage(new WebSocketResponse(apiRequest, outputs));
+                return Ok(outputs);
+            }
+            catch (Exception ex)
+            {
+                simpleWebSocketHandler.SendMessage(new WebSocketResponse(apiRequest, null));
+                return new BadRequestObjectResult(ex);
+            }            
         }
     }
 }
