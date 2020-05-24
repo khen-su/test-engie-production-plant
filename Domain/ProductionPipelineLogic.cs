@@ -26,9 +26,9 @@ namespace Domain
                                                 .ToArray();
             for (int index = 0; index < powerPlants.Count(); index++)
             {
-                decimal production = GetProduction(powerPlants[index], new ArraySegment<PowerPlant<Fuel>>(powerPlants, index, powerPlants.Count() - index - 1), leftload);
-                leftload -= production;
-                productionOutputs.Enqueue(new ProductionOutput(new ValidName(powerPlants[index].Name), new PositiveDecimal(production)));
+                decimal currentproduction = GetProduction(powerPlants[index], new ArraySegment<PowerPlant<Fuel>>(powerPlants, index, powerPlants.Count() - index - 1), leftload);
+                leftload -= currentproduction;
+                productionOutputs.Enqueue(new ProductionOutput(new ValidName(powerPlants[index].Name), new PositiveDecimal(currentproduction)));
             }
             return new ProductionPipeline(productionOutputs);
         }
