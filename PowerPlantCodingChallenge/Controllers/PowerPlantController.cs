@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Domain.Models;
 using Infrastructure;
 using Infrastructure.Interfaces;
@@ -14,13 +16,16 @@ namespace PowerPlantCodingChallenge.Controllers
     {
 
         private readonly IPowerPlantManager _powerPlantManager;
+        private readonly ISimpleWebSocketHandler _webSocketHandler;
 
         public PowerPlantController
             (
                 IPowerPlantManager powerPlantManager
+                , ISimpleWebSocketHandler webSocketHandler
             )
         {
             _powerPlantManager = powerPlantManager;
+            _webSocketHandler = webSocketHandler;
         }
 
         /// <summary>
@@ -30,19 +35,17 @@ namespace PowerPlantCodingChallenge.Controllers
         /// <returns></returns>
         [HttpPost("productionplan")]
         [ProducesResponseType(200, Type = typeof(Queue<ProductionOutput>))]
-        public IActionResult GetProductionPlan([FromBody]PowerPlantsDeliveryApiRequest apiRequest)
+        public async Task<IActionResult> GetProductionPlan([FromBody]PowerPlantsDeliveryApiRequest apiRequest)
         {
-            SimpleWebSocketHandler simpleWebSocketHandler = new SimpleWebSocketHandler();
-
             try
             {
-                var outputs =  _powerPlantManager.Run(apiRequest.PowerPlants, apiRequest.Fuels, apiRequest.Load).Outputs;
-                simpleWebSocketHandler.SendMessage(new WebSocketResponse(apiRequest, outputs));
+                Queue<ProductionOutput> outputs =  _powerPlantManager.Run(apiRequest.PowerPlants, apiRequest.Fuels, apiRequest.Load).Outputs;
+                await _webSocketHandler.SendMessage(new WebSocketResponse(apiRequest, outputs).Serialize());
                 return Ok(outputs);
             }
             catch (Exception ex)
             {
-                simpleWebSocketHandler.SendMessage(new WebSocketResponse(apiRequest, null));
+                await _webSocketHandler.SendMessage(new WebSocketResponse(apiRequest, ex.ToString()).Serialize());
                 return new BadRequestObjectResult(ex);
             }            
         }

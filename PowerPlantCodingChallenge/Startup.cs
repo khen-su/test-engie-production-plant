@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PowerPlantCodingChallenge.Controllers;
+
 namespace PowerPlantCodingChallenge
 {
     public partial class Startup
@@ -40,6 +42,8 @@ namespace PowerPlantCodingChallenge
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            services.AddSignalR().AddMessagePackProtocol();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,23 +56,16 @@ namespace PowerPlantCodingChallenge
 
 
             #region WebSocket
-
-            var webSocketOptions = new WebSocketOptions()
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(120),
-                ReceiveBufferSize = 4 * 1024
-            };
+                endpoints.MapHub<SimpleWebSocketHandler>("/ws");
+            });
+            #endregion
 
-            app.UseWebSockets();
+            #region Swagger
 
-
-        
-
-        #endregion
-
-        #region Swagger
-
-        app.UseSwagger();
+            app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {

@@ -26,15 +26,13 @@ namespace Domain
                                                 .ToArray();
             for (int index = 0; index < powerPlants.Count(); index++)
             {
-                decimal production = GetProduction(powerPlants[index], new ArraySegment<PowerPlant<Fuel>>(powerPlants, index, powerPlants.Count() - index), leftload);
+                decimal production = GetProduction(powerPlants[index], new ArraySegment<PowerPlant<Fuel>>(powerPlants, index, powerPlants.Count() - index - 1), leftload);
                 leftload -= production;
                 productionOutputs.Enqueue(new ProductionOutput(new ValidName(powerPlants[index].Name), new PositiveDecimal(production)));
             }
-
             return new ProductionPipeline(productionOutputs);
         }
 
-      
         private decimal GetProduction(PowerPlant<Fuel> current, IEnumerable<PowerPlant<Fuel>> nexts,  decimal leftLoad)
         {
             //Select next most relevant powerPlant to watch for
@@ -48,11 +46,11 @@ namespace Domain
                 //then the central produce the load which is left to cover
                 return leftLoad;
             }
-            //Else we need to make sure this current productionplant is better than the next one if we were forced to pick between one or the other
+            //Else we need to make sure this current powerplant is better than the next one if we were forced to pick between one or the other
             else
             {
 
-                // The optimal output is the max prod for the current powerplant while having enough p to trigger next powerplant
+                // The optimal output is the max prod for the current powerplant while having enough prod to trigger next powerplant
                 decimal optimalOutput =  Math.Min(leftLoad - next.PMin, current.PMax);
                 // If the min prod of next powerplant is higher than what's left of the load, we intend to skip it, so we send back max prod for the current plant
                 if (optimalOutput < 0) return current.PMax;
