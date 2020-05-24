@@ -4,12 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace SimpleSignalRClient
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Press a key to start listening..");
-            Console.ReadKey();
+            //Console.WriteLine("Press a key to start listening..\n");
+            //Console.ReadKey();
             var connection = new HubConnectionBuilder()
                 .WithUrl("https://localhost:8888/ws")
                 .AddMessagePackProtocol()
@@ -20,7 +20,7 @@ namespace SimpleSignalRClient
 
             connection.StartAsync().GetAwaiter().GetResult();
 
-            Console.WriteLine("Listening. Press a key to quit");
+            Console.WriteLine("Listening... Press a key to quit\n");
             Console.ReadKey();
         }
     }

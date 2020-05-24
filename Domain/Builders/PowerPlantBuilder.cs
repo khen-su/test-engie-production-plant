@@ -24,6 +24,8 @@ namespace Domain.Builders
         public List<PowerPlant<Fuel>> Build(PowerPlantViewModel[] centrals, FuelViewModel fuelViewModel)
         {
             List<PowerPlant<Fuel>> powerPlants = new List<PowerPlant<Fuel>>();
+
+            //Wind centrals
             powerPlants.AddRange( centrals
                 .Where(central => central.Type == KnownPowerPlants.Listing[typeof(Wind)])
                 .Select(central => new PowerPlant<Fuel>
@@ -35,11 +37,12 @@ namespace Domain.Builders
                     , new PositiveDecimal(central.PMax * fuelViewModel.Wind)
                 )));
 
+            //Gas centrals
             powerPlants.AddRange(centrals
             .Where(central => central.Type == KnownPowerPlants.Listing[typeof(Gas)])
             .Select(central => new PowerPlant<Fuel>
             (
-                _resourceBuilder.BuildGasFuel(fuelViewModel.Gas, fuelViewModel.Wind)
+                _resourceBuilder.BuildGasFuel(fuelViewModel.Gas, fuelViewModel.Co2)
                 , central.Name
                 , new PositiveDecimal(central.Efficiency)
                 , new PositiveDecimal(central.PMin)

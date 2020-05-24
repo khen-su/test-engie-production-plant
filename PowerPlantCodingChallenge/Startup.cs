@@ -1,19 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.WebSockets;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PowerPlantCodingChallenge.Controllers;
 
@@ -28,7 +20,6 @@ namespace PowerPlantCodingChallenge
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureDI(services);
@@ -46,7 +37,6 @@ namespace PowerPlantCodingChallenge
             services.AddSignalR().AddMessagePackProtocol();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -57,10 +47,7 @@ namespace PowerPlantCodingChallenge
 
             #region WebSocket
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHub<SimpleWebSocketHandler>("/ws");
-            });
+         
             #endregion
 
             #region Swagger
@@ -75,6 +62,11 @@ namespace PowerPlantCodingChallenge
 
             #endregion
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<SimpleWebSocketHandler>("/ws");
+                endpoints.MapControllers();
+            });
 
             app.UseHttpsRedirection();
 
@@ -82,10 +74,6 @@ namespace PowerPlantCodingChallenge
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
         }
     }
 }

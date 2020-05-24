@@ -51,10 +51,12 @@ This application was written in **C# 9**, **ASP.NET CORE 3.1** In Visual Studio 
 
 *(instruction detailed on swagger page)*
 
-* Registering to the websocket hub *https://localhost:8888/ws* (I have provided a SimpleWebSocketClient to give you an example)
+* Registering to the websocket hub *https://localhost:8888/ws* (I have provided a SimpleWebSocketClient in the solution to give you an example)
 
 ### Remarks
 
-* *To be completely honest with you, it's my first time with SignalR so my code for that part will be sub-optimal, feel free to ignore that part if it seems too hard to make it work on your side*
+* I created the websocket client/server using SignalR as it takes away a lot of the overhead of managing retries of connection, protocol switching,...It is included as a console project (SimpleSignalRClient) inside the solution. It won't be automatically launched from the startup project of the solution so it needs to be run separately, too.
+
+* I am taking into account the CO2 emission price for the gas powerplants in my merit-order algorithm.
 
 * Thanks a lot for reviewing!
