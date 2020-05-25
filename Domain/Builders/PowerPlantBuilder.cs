@@ -49,6 +49,7 @@ namespace Domain.Builders
                 , new PositiveDecimal(central.PMax)
             )));
 
+            //Kerosine centrals
             powerPlants.AddRange(centrals
            .Where(central => central.Type == KnownPowerPlants.Listing[typeof(Kerosine)])
            .Select(central => new PowerPlant<Fuel>

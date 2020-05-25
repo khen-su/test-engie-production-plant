@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Models;
-using Infrastructure;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PowerPlantCodingChallenge.Requests;
 
 namespace PowerPlantCodingChallenge.Controllers
@@ -17,15 +16,18 @@ namespace PowerPlantCodingChallenge.Controllers
 
         private readonly IPowerPlantManager _powerPlantManager;
         private readonly ISimpleWebSocketHandler _webSocketHandler;
+        private readonly ILogger<PowerPlantController> _logger;
 
         public PowerPlantController
             (
                 IPowerPlantManager powerPlantManager
                 , ISimpleWebSocketHandler webSocketHandler
+                , ILogger<PowerPlantController> logger
             )
         {
             _powerPlantManager = powerPlantManager;
             _webSocketHandler = webSocketHandler;
+            _logger = logger;
         }
 
         /// <summary>
@@ -39,7 +41,10 @@ namespace PowerPlantCodingChallenge.Controllers
         {
             try
             {
+                _logger.LogInformation("A request was made to get the production plan.");
                 Queue<ProductionOutput> outputs =  _powerPlantManager.Run(apiRequest.PowerPlants, apiRequest.Fuels, apiRequest.Load).Outputs;
+                //Send back websocket to all
+                _logger.LogInformation("Request and Response is being sent to all connected websocket user");
                 await _webSocketHandler.SendMessage(new WebSocketResponse(apiRequest, outputs).Serialize());
                 return Ok(outputs);
             }

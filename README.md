@@ -8,6 +8,7 @@ This application was written in **C# 9**, **ASP.NET CORE 3.1** In Visual Studio 
 ### To setup the server
 * A computer
 * A free *8888* port
+* Docker and a docker client installed (if using the file image)
 * [.NET CORE SDK](https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.300-macos-x64-installer)
 * Visual Studio (preferably 2019 but 2017 should do, too) or Visual Studio Code.
 
@@ -16,13 +17,24 @@ This application was written in **C# 9**, **ASP.NET CORE 3.1** In Visual Studio 
 * Any client able to make HTTP Requests with a payload
 * BONUS : *a SignalR client (will have to call endpoint /ws)*
 
-
 ## Launch instruction
+Multiple option to launch the api:
 
-1) * dotnet run PowerPlantCodingChallenge.sln in the root app folder
-2) * open the solution file (PowerPlantCodingChallenge.sln) with Visual Studio (or VS Code). 
-    * Make sure the startup project is PowerPlantCodingChallenge
-    * Run
+#### Docker Image file
+1) make sure you have the docker daemon running with privileged access (or have a Docker client desktop app)
+2) pull the docker file from with
+```docker pull khensu/powerplantengiechallenge:aspnetcore```
+3) run the docker with ```docker run --rm -it -p 8888:80 {dockerId}```
+to have an interactive temporal session with the default port(80) mapped to the port 8888
+4) the api should be available on *```https://localhost:8888/productionplan```*
+
+#### Command Line
+1) dotnet run PowerPlantCodingChallenge.sln in the root app folder
+
+#### IDE
+1) open the solution file (PowerPlantCodingChallenge.sln) with Visual Studio (or VS Code). 
+2) make sure the startup project is PowerPlantCodingChallenge
+3) Run
 
 ## What can be done
 
@@ -49,7 +61,7 @@ This application was written in **C# 9**, **ASP.NET CORE 3.1** In Visual Studio 
 }
 ```
 
-*(instruction detailed on swagger page)*
+*(instructions detailed on the swagger page)*
 
 * Registering to the websocket hub *https://localhost:8888/ws* (I have provided a SimpleWebSocketClient in the solution to give you an example)
 
