@@ -23,16 +23,16 @@ Multiple option to launch the api:
 #### Docker Image file
 1) make sure you have the docker daemon running with privileged access (or have a Docker client desktop app)
 2) pull the docker file from with
-```docker pull khensu/powerplantengiechallenge:aspnetcore```
+```docker pull khensu/engiechallenge:api```
 3) run the docker with ```docker run --rm -it -p 8888:80 {dockerId}```
 to have an interactive temporal session with the default port(80) mapped to the port 8888
-4) the api should be available on *```https://localhost:8888/productionplan```*
+4) the api should be available on *```http://localhost:8888/productionplan```* (not https)
 
 #### Command Line
 1) dotnet run PowerPlantCodingChallenge.sln in the root app folder
 
 #### IDE
-1) open the solution file (PowerPlantCodingChallenge.sln) with Visual Studio (or VS Code). 
+1) open the solution file (*PowerPlantCodingChallenge.sln*) with Visual Studio (or VS Code). 
 2) make sure the startup project is PowerPlantCodingChallenge
 3) Run
 
@@ -61,7 +61,7 @@ to have an interactive temporal session with the default port(80) mapped to the 
 }
 ```
 
-*(instructions detailed on the swagger page)*
+*(instructions detailed on the localhost [swagger](https://localhost:8888/index.html) page )*
 
 * Registering to the websocket hub *https://localhost:8888/ws* (I have provided a SimpleWebSocketClient in the solution to give you an example)
 
@@ -69,6 +69,6 @@ to have an interactive temporal session with the default port(80) mapped to the 
 
 * I created the websocket client/server using SignalR as it takes away a lot of the overhead of managing retries of connection, protocol switching,...It is included as a console project (SimpleSignalRClient) inside the solution. It won't be automatically launched from the startup project of the solution so it needs to be run separately, too.
 
-* I am taking into account the CO2 emission price for the gas powerplants in my merit-order algorithm.
+* I am taking into account the CO2 emission price for the gas powerplants in my merit-order sorting algorithm.
 
 * Thanks a lot for reviewing!

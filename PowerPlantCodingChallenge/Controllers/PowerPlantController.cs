@@ -10,7 +10,6 @@ using PowerPlantCodingChallenge.Requests;
 namespace PowerPlantCodingChallenge.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class PowerPlantController : Controller
     {
 
